@@ -1,7 +1,9 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ══════════════════════════════════════════════
+# O2S — Production .gitignore
+# ══════════════════════════════════════════════
 
-# dependencies
-/node_modules
+# ── Dependencies ──
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -10,32 +12,112 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# ── Build Output ──
 /.next/
 /out/
+/build/
+/dist/
+/.turbo/
+/storybook-static/
 
-# production
-/build
+# ── Environment Variables ──
+.env
+.env.*
+!.env.example
+!.env.template
 
-# misc
+# ── IDE & Editor ──
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# ── OS Files ──
 .DS_Store
-*.pem
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# debug
+# ── Debug & Logs ──
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.log
+logs/
 
-# env files (can opt-in for committing if needed)
-.env*
+# ── Testing & Coverage ──
+/coverage/
+/.nyc_output/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+junit.xml
 
-# vercel
-.vercel
-
-# typescript
+# ── TypeScript ──
 *.tsbuildinfo
 next-env.d.ts
+
+# ── Secrets & Credentials ──
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+*.jks
+credentials.json
+service-account.json
+*.keystore
+
+# ── Deployment ──
+.vercel/
+.netlify/
+.serverless/
+.amplify/
+cdk.out/
+
+# ── Docker ──
+docker-compose.override.yml
+
+# ── Database ──
+*.sqlite
+*.sqlite3
+*.db
+/prisma/migrations/**/migration_lock.toml
+
+# ── Temporary Files ──
+/tmp/
+/temp/
+*.tmp
+*.bak
+*.swp
+*.cache
+
+# ── Package Lock (keep only one) ──
+# Uncomment the ones you DON'T use:
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# ── Generated Files ──
+/public/sw.js
+/public/workbox-*.js
+/public/sitemaps/
+/.contentlayer/
+/.claude/
+
+# ── Misc ──
+*.map.js
+.eslintcache
+.stylelintcache
+.prettiercache
