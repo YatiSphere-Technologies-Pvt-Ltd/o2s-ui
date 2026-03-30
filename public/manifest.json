@@ -1,0 +1,18 @@
+{
+  "name": "O2S — Organization Operating System",
+  "short_name": "O2S",
+  "description": "AI-native HR automation platform by Yatisphere Technologies",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#07070D",
+  "theme_color": "#3B82F6",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}
