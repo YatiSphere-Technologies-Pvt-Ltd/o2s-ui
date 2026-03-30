@@ -32,6 +32,8 @@ import {
   ShoppingCart,
   Megaphone,
   FileText,
+  Sparkles,
+  Shield,
 } from "lucide-react";
 import { O2sLogo } from "@/components/auth/o2s-logo";
 import { Button } from "@/components/ui/button";
@@ -59,6 +61,8 @@ const NAV_GROUPS: NavGroup[] = [
     accentClass: "border-warning",
     items: [
       { label: "Home", href: "/dashboard", icon: House },
+      { label: "Command Center", href: "/command-center", icon: Kanban },
+      { label: "Automation", href: "/automation", icon: Sparkles },
       { label: "Analytics", href: "/analytics", icon: BarChart3 },
     ],
   },
@@ -76,6 +80,9 @@ const NAV_GROUPS: NavGroup[] = [
           { label: "Talent Pool", href: "/talent-pool" },
           { label: "Vendors", href: "/vendors" },
           { label: "Interviews", href: "/interviews" },
+          { label: "Interview Command", href: "/interview-command" },
+          { label: "Interview Arena", href: "/interview-arena" },
+          { label: "Panels", href: "/panels" },
           { label: "Candidates", href: "/candidates" },
         ],
       },
@@ -98,6 +105,7 @@ const NAV_GROUPS: NavGroup[] = [
     accentClass: "border-brand-teal",
     items: [
       { label: "People", href: "/people", icon: UserCircle },
+      { label: "People Command", href: "/people-command", icon: Shield },
       { label: "Onboarding", href: "/onboarding-hub", icon: Rocket },
       { label: "Performance", href: "/performance", icon: TrendingUp },
       { label: "Goals & OKRs", href: "/goals", icon: Target },
