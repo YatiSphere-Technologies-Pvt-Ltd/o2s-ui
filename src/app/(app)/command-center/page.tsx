@@ -569,6 +569,7 @@ export default function CommandCenterPage() {
               <svg width={40} height={40} className="-rotate-90">
                 <circle cx={20} cy={20} r={16} fill="none" stroke="currentColor" strokeWidth={3} className="text-border" />
                 <motion.circle cx={20} cy={20} r={16} fill="none" stroke="#10B981" strokeWidth={3} strokeLinecap="round" strokeDasharray={100.5}
+                  initial={{ strokeDashoffset: 100.5 }}
                   animate={{ strokeDashoffset: 100.5 * (1 - progressPercent / 100) }} transition={{ duration: 0.5 }} />
               </svg>
               <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold text-success">{Math.round(progressPercent)}%</span>

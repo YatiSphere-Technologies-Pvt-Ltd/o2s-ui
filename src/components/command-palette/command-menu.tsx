@@ -70,6 +70,26 @@ const COMMANDS = [
     ],
   },
   {
+    group: "Delivery & PMO",
+    items: [
+      { label: "Delivery home", href: "/delivery" },
+      { label: "Agent tower", href: "/delivery/agents" },
+    ],
+  },
+  {
+    group: "Admin & Security",
+    items: [
+      { label: "Admin overview", href: "/admin" },
+      { label: "Modules & entitlements", href: "/admin/modules" },
+      { label: "Module catalog (Super Admin)", href: "/admin/modules/catalog" },
+      { label: "Permission matrix", href: "/admin/permissions" },
+      { label: "Roles", href: "/admin/roles" },
+      { label: "Users", href: "/admin/users" },
+      { label: "Groups", href: "/admin/groups" },
+      { label: "Admin audit log", href: "/admin/audit" },
+    ],
+  },
+  {
     group: "Profile",
     items: [
       { label: "My Profile", href: "/profile" },
