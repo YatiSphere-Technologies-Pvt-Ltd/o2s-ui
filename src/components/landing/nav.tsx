@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { O2sLogo } from "@/components/auth/o2s-logo";
+import O2SLogo from "@/components/brands/OS2Logo";
 
 const navLinks = [
   { label: "Product", href: "#product" },
@@ -53,7 +53,7 @@ export function Nav() {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
         <div className="flex items-center gap-2.5">
-          <O2sLogo size="sm" />
+          <O2SLogo size={100} />
           <span className="hidden sm:inline text-[10px] text-muted-foreground/50 font-medium border-l border-border pl-2.5">
             by Yatisphere
           </span>

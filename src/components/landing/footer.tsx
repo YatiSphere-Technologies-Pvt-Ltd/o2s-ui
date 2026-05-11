@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { O2sLogo } from "@/components/auth/o2s-logo";
+import O2SLogo from "@/components/brands/OS2Logo";
 
 const footerLinks = {
   Product: [
@@ -66,7 +66,7 @@ export function Footer() {
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-1">
             <div className="mb-4">
-              <O2sLogo size="sm" />
+              <O2SLogo size={100} />
             </div>
             <p className="text-sm text-[#8892A8] leading-relaxed mb-3">
               The AI-native Organization Operating System.

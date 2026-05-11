@@ -351,9 +351,7 @@
 /* ═══════════════════════════════════════════════════════
    Base Layer
    ═══════════════════════════════════════════════════════ */
-html {
-  scroll-behavior: smooth;
-}
+/* scroll-behavior moved to data-scroll-behavior attr on <html> in layout.tsx */
 
 @layer base {
   * {
