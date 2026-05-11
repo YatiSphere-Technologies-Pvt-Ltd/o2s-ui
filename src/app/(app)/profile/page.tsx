@@ -23,11 +23,13 @@ import { PreferencesTab } from "@/components/profile/preferences-tab";
 import { SecurityTab } from "@/components/profile/security-tab";
 import { ActivityTab } from "@/components/profile/activity-tab";
 import { NotificationsTab } from "@/components/profile/notifications-tab";
+import { PrivacyTab } from "@/components/profile/privacy-tab";
 
 const TAB_COMPONENTS: Record<ProfileTab, React.ComponentType> = {
   overview: OverviewTab,
   preferences: PreferencesTab,
   security: SecurityTab,
+  privacy: PrivacyTab,
   activity: ActivityTab,
   notifications: NotificationsTab,
 };
