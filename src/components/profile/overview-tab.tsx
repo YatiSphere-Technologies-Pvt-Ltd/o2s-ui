@@ -30,11 +30,15 @@ function InfoField({ label, value }: InfoFieldProps) {
   );
 }
 
+type StringFieldKey = {
+  [K in keyof UserProfile]: UserProfile[K] extends string ? K : never;
+}[keyof UserProfile];
+
 interface EditFieldProps {
   label: string;
   value: string;
-  field: keyof UserProfile;
-  onChange: (field: keyof UserProfile, value: string) => void;
+  field: StringFieldKey;
+  onChange: (field: StringFieldKey, value: string) => void;
 }
 
 function EditField({ label, value, field, onChange }: EditFieldProps) {
@@ -63,7 +67,7 @@ export function OverviewTab() {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({ ...CURRENT_USER });
 
-  const handleChange = (field: keyof UserProfile, value: string) => {
+  const handleChange = (field: StringFieldKey, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -76,7 +80,7 @@ export function OverviewTab() {
     setEditing(false);
   };
 
-  const fields: { label: string; field: keyof UserProfile }[] = [
+  const fields: { label: string; field: StringFieldKey }[] = [
     { label: "First Name", field: "firstName" },
     { label: "Last Name", field: "lastName" },
     { label: "Email", field: "email" },

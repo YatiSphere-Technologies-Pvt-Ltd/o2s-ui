@@ -2,15 +2,30 @@
    O2S User Profile — Types & Mock Data
    ================================================================ */
 
-export type ProfileTab = "overview" | "preferences" | "security" | "activity" | "notifications";
+export type ProfileTab = "overview" | "preferences" | "security" | "activity" | "notifications" | "privacy";
 
 export const PROFILE_TABS: { key: ProfileTab; label: string }[] = [
   { key: "overview", label: "Profile" },
   { key: "preferences", label: "Preferences" },
   { key: "security", label: "Security" },
+  { key: "privacy", label: "Privacy & Consent" },
   { key: "activity", label: "Activity" },
   { key: "notifications", label: "Notifications" },
 ];
+
+/* ── Roles / Personas ── */
+
+export type Role = "employee" | "manager" | "hr" | "admin";
+
+export const ROLE_META: Record<Role, { label: string; description: string; accent: string }> = {
+  employee: { label: "Employee", description: "Your personal workspace", accent: "text-brand-teal" },
+  manager:  { label: "Manager",  description: "Your team & approvals",   accent: "text-warning" },
+  hr:       { label: "HR / People Ops", description: "Org-wide people operations", accent: "text-brand-purple" },
+  admin:    { label: "Admin",    description: "Platform configuration",  accent: "text-destructive" },
+};
+
+export const TENANT_NAME = "Latent Bridge";
+export const FISCAL_PERIOD = "FY2026 Q2";
 
 /* ── User Profile ── */
 
@@ -21,7 +36,12 @@ export interface UserProfile {
   initials: string;
   email: string;
   phone: string;
+  /** Display label (kept for legacy UI). Source of truth for capability is `roles`. */
   role: string;
+  /** All hats this user wears. */
+  roles: Role[];
+  /** Default role to switch into on first load. */
+  defaultRole: Role;
   department: string;
   team: string;
   location: string;
@@ -46,6 +66,8 @@ export const CURRENT_USER: UserProfile = {
   email: "prashant@latentbridge.com",
   phone: "+91 98765 00000",
   role: "Owner",
+  roles: ["employee", "manager", "hr", "admin"],
+  defaultRole: "admin",
   department: "Engineering",
   team: "Executive",
   location: "Bangalore, India",
@@ -129,31 +151,112 @@ export const ACTIVITY_TYPE_CONFIG: Record<string, { icon: string; colorClass: st
 
 /* ── Notification Preferences ── */
 
+export type NotificationChannelKey = "email" | "inApp" | "slack" | "teams" | "sms" | "whatsapp";
+
+export const NOTIFICATION_CHANNELS: { key: NotificationChannelKey; label: string }[] = [
+  { key: "email",    label: "Email" },
+  { key: "inApp",    label: "In-App" },
+  { key: "slack",    label: "Slack" },
+  { key: "teams",    label: "Teams" },
+  { key: "sms",      label: "SMS" },
+  { key: "whatsapp", label: "WhatsApp" },
+];
+
+export interface NotificationItem {
+  label: string;
+  email: boolean;
+  inApp: boolean;
+  slack: boolean;
+  teams: boolean;
+  sms: boolean;
+  whatsapp: boolean;
+}
+
 export interface NotificationCategory {
   category: string;
-  items: { label: string; email: boolean; inApp: boolean; slack: boolean }[];
+  items: NotificationItem[];
 }
+
+const N = (label: string, mask: Partial<Omit<NotificationItem, "label">> = {}): NotificationItem => ({
+  label,
+  email: mask.email ?? true,
+  inApp: mask.inApp ?? true,
+  slack: mask.slack ?? false,
+  teams: mask.teams ?? false,
+  sms:   mask.sms   ?? false,
+  whatsapp: mask.whatsapp ?? false,
+});
 
 export const NOTIFICATION_PREFS: NotificationCategory[] = [
   { category: "Hiring & Recruiting", items: [
-    { label: "New candidate application", email: true, inApp: true, slack: true },
-    { label: "Interview scheduled/changed", email: true, inApp: true, slack: true },
-    { label: "Scorecard submitted", email: true, inApp: true, slack: false },
-    { label: "Offer accepted/declined", email: true, inApp: true, slack: true },
-    { label: "Requisition approval needed", email: true, inApp: true, slack: true },
-    { label: "AI screening completed", email: false, inApp: true, slack: false },
+    N("New candidate application", { slack: true }),
+    N("Interview scheduled/changed", { slack: true, teams: true }),
+    N("Scorecard submitted"),
+    N("Offer accepted/declined", { slack: true }),
+    N("Requisition approval needed", { slack: true, sms: true }),
+    N("AI screening completed", { email: false }),
   ]},
   { category: "People & HR", items: [
-    { label: "Leave request submitted", email: true, inApp: true, slack: false },
-    { label: "Performance review due", email: true, inApp: true, slack: false },
-    { label: "Employee milestone (anniversary)", email: true, inApp: true, slack: true },
-    { label: "Onboarding task assigned", email: true, inApp: true, slack: false },
+    N("Leave request submitted", { teams: true }),
+    N("Leave decision (approved/rejected)", { whatsapp: true }),
+    N("Performance review due"),
+    N("Employee milestone (anniversary)", { slack: true }),
+    N("Onboarding task assigned"),
   ]},
   { category: "System & AI", items: [
-    { label: "AI agent error", email: true, inApp: true, slack: true },
-    { label: "AI agent action completed", email: false, inApp: true, slack: false },
-    { label: "Usage limit approaching", email: true, inApp: true, slack: false },
-    { label: "Security alert", email: true, inApp: true, slack: true },
-    { label: "Weekly digest", email: true, inApp: false, slack: false },
+    N("AI agent error", { slack: true, sms: true }),
+    N("AI agent action completed", { email: false }),
+    N("Usage limit approaching"),
+    N("Security alert", { slack: true, sms: true, whatsapp: true }),
+    N("Weekly digest", { inApp: false }),
   ]},
 ];
+
+export interface QuietHours {
+  enabled: boolean;
+  start: string; // HH:MM
+  end: string;
+  weekendsAllDay: boolean;
+}
+
+export const DEFAULT_QUIET_HOURS: QuietHours = {
+  enabled: true,
+  start: "20:00",
+  end: "08:00",
+  weekendsAllDay: true,
+};
+
+/* ── Delegates (for routing questions/asks to specific people by topic) ── */
+
+export interface Delegate {
+  topic: string;
+  personName: string;
+  personInitials: string;
+  personRole: string;
+}
+
+export const DEFAULT_DELEGATES: Delegate[] = [
+  { topic: "Engineering questions", personName: "Meera Krishnan",  personInitials: "MK", personRole: "VP Engineering" },
+  { topic: "Operations",            personName: "Anil Sharma",     personInitials: "AS", personRole: "Head of Ops" },
+  { topic: "People & HR",           personName: "Priya Desai",     personInitials: "PD", personRole: "People Ops Lead" },
+];
+
+/* ── Consent (data handling + agent autonomy) ── */
+
+export type AgentAutonomy = "Manual" | "Supervised" | "Autonomous";
+
+export interface ConsentPrefs {
+  shareMedicalLeaveDetails: boolean;       // share medical/sick-leave reason details with manager
+  storeHealthDocs: boolean;                // allow platform to retain uploaded medical documents
+  agentAutonomy: AgentAutonomy;            // how much initiative agents can take
+  agentMayContactColleagues: boolean;      // agents may message colleagues on user's behalf
+  shareWellbeingSignals: boolean;          // include in wellbeing/burnout aggregates
+}
+
+export const DEFAULT_CONSENT: ConsentPrefs = {
+  shareMedicalLeaveDetails: false,
+  storeHealthDocs: false,
+  agentAutonomy: "Supervised",
+  agentMayContactColleagues: false,
+  shareWellbeingSignals: true,
+};

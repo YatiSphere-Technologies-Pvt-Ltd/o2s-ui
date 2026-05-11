@@ -11,12 +11,17 @@ import {
   Keyboard,
   HelpCircle,
   LogOut,
+  Check,
+  UserCog,
 } from "lucide-react";
-import { CURRENT_USER } from "@/components/profile/data";
+import { CURRENT_USER, ROLE_META, type Role } from "@/components/profile/data";
+import { useRole } from "@/lib/role-context";
 
 export function UserMenu() {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { activeRole, setActiveRole, availableRoles } = useRole();
+  const activeMeta = ROLE_META[activeRole];
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -84,11 +89,52 @@ export function UserMenu() {
                     {CURRENT_USER.email}
                   </p>
                 </div>
-                <span className="ml-auto text-[10px] bg-brand-purple/10 text-brand-purple rounded-full px-2 py-0.5 whitespace-nowrap">
-                  {CURRENT_USER.role}
+                <span className={`ml-auto text-[10px] bg-secondary rounded-full px-2 py-0.5 whitespace-nowrap ${activeMeta.accent}`}>
+                  {activeMeta.label}
                 </span>
               </div>
             </div>
+
+            {/* Role / Persona switcher */}
+            {availableRoles.length > 1 && (
+              <div className="px-3 py-3 border-b border-border">
+                <div className="flex items-center gap-2 mb-2 text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                  <UserCog className="size-3" />
+                  Switch persona
+                </div>
+                <div className="space-y-1">
+                  {availableRoles.map((r: Role) => {
+                    const meta = ROLE_META[r];
+                    const isActive = r === activeRole;
+                    return (
+                      <button
+                        key={r}
+                        onClick={() => {
+                          setActiveRole(r);
+                          setOpen(false);
+                        }}
+                        className={`w-full flex items-center gap-3 px-2 py-1.5 rounded-md text-left transition-colors ${
+                          isActive
+                            ? "bg-surface-overlay"
+                            : "hover:bg-surface-overlay/60"
+                        }`}
+                      >
+                        <span className={`size-1.5 rounded-full bg-current ${meta.accent}`} />
+                        <span className="flex-1 min-w-0">
+                          <span className={`block text-xs font-medium ${isActive ? "text-foreground" : "text-muted-foreground"}`}>
+                            {meta.label}
+                          </span>
+                          <span className="block text-[10px] text-muted-foreground/60 truncate">
+                            {meta.description}
+                          </span>
+                        </span>
+                        {isActive && <Check className="size-3.5 text-brand shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Navigation items */}
             <div className="py-1">
