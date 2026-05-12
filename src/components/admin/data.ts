@@ -26,6 +26,7 @@ export type ModuleKey =
   | "knowledge"
   | "learning"
   | "legal"
+  | "presales"
   | "people";
 
 export type TierKey = "free" | "pro" | "enterprise";
@@ -218,6 +219,22 @@ export const MODULES: ModuleDef[] = [
       { key: "legal.immigration", label: "Immigration",     minTier: "enterprise" },
     ],
   },
+  {
+    key: "presales",
+    label: "Pre-Sales & Proposals",
+    blurb: "Pursuits, RFPs, capture, proposal authoring, orals.",
+    iconName: "Target",
+    accent: "text-brand-purple",
+    tiers: ["pro", "enterprise"],
+    features: [
+      { key: "presales.pursuits",     label: "Pursuits & qualification", minTier: "pro" },
+      { key: "presales.rfp",          label: "RFP / RFI workspace",      minTier: "pro" },
+      { key: "presales.compliance",   label: "Compliance matrix",         minTier: "pro" },
+      { key: "presales.authoring",    label: "Proposal authoring",        minTier: "pro" },
+      { key: "presales.reviews",      label: "Pink / Red / Gold reviews", minTier: "enterprise" },
+      { key: "presales.agents",       label: "Pre-Sales Agents",          minTier: "enterprise" },
+    ],
+  },
 ];
 
 export const MODULE_MAP: Record<ModuleKey, ModuleDef> = Object.fromEntries(
@@ -255,7 +272,9 @@ export const TENANT_ENTITLEMENTS: TenantEntitlement[] = [
   { module: "facilities", tier: "free",       expiresOn: "2027-04-01", seats: 2000 },
   { module: "engage",     tier: "pro",        expiresOn: "2027-04-01", seats: 2000 },
   { module: "knowledge",  tier: "pro",        expiresOn: "2027-04-01", seats: 2000 },
-  // NOT purchased: procurement, learning, legal
+  { module: "legal",      tier: "enterprise", expiresOn: "2027-04-01", seats: 50 },
+  { module: "presales",   tier: "enterprise", expiresOn: "2027-04-01", seats: 80 },
+  // NOT purchased: procurement, learning
 ];
 
 /* ── Permission catalog ─────────────────────────────────────── */
@@ -373,6 +392,49 @@ export const IT_PERMISSIONS: PermissionDef[] = [
   { key: "it.asset.write",  module: "it", group: "Assets",   label: "Edit assets",   description: "Assign and retire assets.", minTier: "pro" },
 ];
 
+export const LEGAL_PERMISSIONS: PermissionDef[] = [
+  { key: "legal.matter.read",     module: "legal", group: "Matters",     label: "Read matters",      description: "View open and historical legal matters.",       minTier: "enterprise" },
+  { key: "legal.matter.write",    module: "legal", group: "Matters",     label: "Edit matters",      description: "Open / update / close legal matters.",          minTier: "enterprise" },
+  { key: "legal.contract.read",   module: "legal", group: "Contracts",   label: "Read contracts",    description: "View contract repository.",                       minTier: "enterprise" },
+  { key: "legal.contract.draft",  module: "legal", group: "Contracts",   label: "Draft contracts",   description: "Create or redline contracts.",                    minTier: "enterprise" },
+  { key: "legal.contract.sign",   module: "legal", group: "Contracts",   label: "Send for signature", description: "Route a contract for final signature.",          minTier: "enterprise" },
+  { key: "legal.playbook.read",   module: "legal", group: "Playbooks",   label: "Read playbooks",    description: "Read clause-by-clause playbooks.",                minTier: "enterprise" },
+  { key: "legal.playbook.write",  module: "legal", group: "Playbooks",   label: "Edit playbooks",    description: "Maintain playbooks and clause libraries.",        minTier: "enterprise" },
+  { key: "legal.obligation.read", module: "legal", group: "Obligations", label: "Read obligations",  description: "View extracted obligations from signed contracts.", minTier: "enterprise" },
+  { key: "legal.obligation.write",module: "legal", group: "Obligations", label: "Edit obligations",  description: "Assign owners, close obligations.",                minTier: "enterprise" },
+  { key: "legal.compliance.read", module: "legal", group: "Compliance",  label: "Read compliance",   description: "View compliance feed and register.",              minTier: "enterprise" },
+  { key: "legal.compliance.act",  module: "legal", group: "Compliance",  label: "Act on compliance", description: "Acknowledge, escalate, draft redlines.",          minTier: "enterprise" },
+  { key: "legal.dsar.read",       module: "legal", group: "Privacy",     label: "Read DSARs",        description: "View data-subject access requests.",              minTier: "enterprise" },
+  { key: "legal.dsar.act",        module: "legal", group: "Privacy",     label: "Act on DSARs",      description: "Run DSAR workflow, sign-off responses.",          minTier: "enterprise" },
+  { key: "legal.spend.read",      module: "legal", group: "Spend",       label: "Read legal spend",  description: "View outside-counsel spend and invoices.",        minTier: "enterprise" },
+  { key: "legal.spend.act",       module: "legal", group: "Spend",       label: "Act on legal spend", description: "Approve invoices, dispute lines.",               minTier: "enterprise" },
+  { key: "legal.board.read",      module: "legal", group: "Board",       label: "Read board materials", description: "View board / committee materials.",            minTier: "enterprise" },
+  { key: "legal.board.act",       module: "legal", group: "Board",       label: "Act on board materials", description: "Draft and finalise board materials.",        minTier: "enterprise" },
+  { key: "legal.ethics.read",     module: "legal", group: "Ethics",      label: "Read ethics queue", description: "Restricted: hotline / whistleblower queue.",      minTier: "enterprise" },
+  { key: "legal.ethics.act",      module: "legal", group: "Ethics",      label: "Act on ethics queue", description: "Restricted: triage / route ethics submissions.", minTier: "enterprise" },
+];
+
+export const PRESALES_PERMISSIONS: PermissionDef[] = [
+  { key: "presales.pursuit.read",      module: "presales", group: "Pursuits",   label: "Read pursuits",       description: "View active and closed pursuits.",                       minTier: "pro" },
+  { key: "presales.pursuit.write",     module: "presales", group: "Pursuits",   label: "Edit pursuits",       description: "Open, qualify, advance, or close pursuits.",             minTier: "pro" },
+  { key: "presales.pursuit.bid_decide",module: "presales", group: "Pursuits",   label: "Bid/no-bid decision", description: "Record the formal bid/no-bid decision for a pursuit.",   minTier: "pro" },
+  { key: "presales.rfp.read",          module: "presales", group: "RFPs",       label: "Read RFPs",           description: "View RFP / RFI / RFQ documents and decomposition.",      minTier: "pro" },
+  { key: "presales.rfp.write",         module: "presales", group: "RFPs",       label: "Edit RFPs",           description: "Upload RFPs, edit compliance matrix and ownership.",     minTier: "pro" },
+  { key: "presales.capture.read",      module: "presales", group: "Capture",    label: "Read capture plans",  description: "View capture plans, win themes, customer intel.",        minTier: "pro" },
+  { key: "presales.capture.write",     module: "presales", group: "Capture",    label: "Edit capture plans",  description: "Author capture plans, edit win themes.",                 minTier: "pro" },
+  { key: "presales.proposal.read",     module: "presales", group: "Proposals",  label: "Read proposals",      description: "View proposal drafts and sections.",                     minTier: "pro" },
+  { key: "presales.proposal.write",    module: "presales", group: "Proposals",  label: "Author proposals",    description: "Edit and contribute to proposal sections.",              minTier: "pro" },
+  { key: "presales.review.run",        module: "presales", group: "Reviews",    label: "Run pink/red/gold",   description: "Run pink/red/gold reviews and capture findings.",        minTier: "enterprise" },
+  { key: "presales.pricing.read",      module: "presales", group: "Pricing",    label: "Read pricing",        description: "View pricing workbooks and win-probability curves.",     minTier: "pro" },
+  { key: "presales.pricing.write",     module: "presales", group: "Pricing",    label: "Edit pricing",        description: "Edit pricing assumptions, run scenarios.",               minTier: "enterprise" },
+  { key: "presales.submission.gate",   module: "presales", group: "Submission", label: "Submission gate",     description: "Final go/no-go on submission.",                          minTier: "pro" },
+  { key: "presales.qna.act",           module: "presales", group: "Q&A",        label: "Manage Q&A",          description: "Route, draft, and dispatch evaluator Q&A responses.",     minTier: "pro" },
+  { key: "presales.debrief.read",      module: "presales", group: "Debriefs",   label: "Read debriefs",       description: "View win/loss debriefs.",                                minTier: "pro" },
+  { key: "presales.debrief.write",     module: "presales", group: "Debriefs",   label: "Edit debriefs",       description: "Conduct and finalise win/loss debriefs.",                minTier: "enterprise" },
+  { key: "presales.library.read",      module: "presales", group: "Knowledge",  label: "Read library",        description: "Browse the proposal content library.",                   minTier: "pro" },
+  { key: "presales.library.write",     module: "presales", group: "Knowledge",  label: "Curate library",      description: "Tag, refresh, and approve reusable content.",            minTier: "enterprise" },
+];
+
 export const ALL_PERMISSIONS: PermissionDef[] = [
   ...PLATFORM_PERMISSIONS,
   ...TALENT_PERMISSIONS,
@@ -381,6 +443,8 @@ export const ALL_PERMISSIONS: PermissionDef[] = [
   ...DELIVERY_PERMISSIONS,
   ...FINANCE_PERMISSIONS,
   ...IT_PERMISSIONS,
+  ...LEGAL_PERMISSIONS,
+  ...PRESALES_PERMISSIONS,
 ];
 
 export const PERMISSIONS_BY_MODULE: Record<string, PermissionDef[]> = ALL_PERMISSIONS.reduce(
