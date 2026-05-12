@@ -142,11 +142,25 @@ export default function AdminOverviewPage() {
               accent="bg-warning/10 text-warning"
             />
             <ActionTile
-              href="/admin/roles"
+              href="/admin/rbac/roles"
               icon={UserCheck}
-              title="Roles"
-              description="Built-in + custom roles. Tenant-, module-, or team-scoped."
+              title="RBAC · Roles"
+              description="Azure-style per-module role catalog. Clone built-ins to mint custom roles."
+              accent="bg-brand-purple/10 text-brand-purple"
+            />
+            <ActionTile
+              href="/admin/rbac/assignments"
+              icon={FileLock2}
+              title="RBAC · Assignments"
+              description="Every principal × role × scope. Grant at tenant, module, or single record."
               accent="bg-brand-teal/10 text-brand-teal"
+            />
+            <ActionTile
+              href="/admin/rbac/my-access"
+              icon={UserCheck}
+              title="RBAC · My access"
+              description="What you can do, and where. Useful for any user."
+              accent="bg-success/10 text-success"
             />
             <ActionTile
               href="/admin/users"
